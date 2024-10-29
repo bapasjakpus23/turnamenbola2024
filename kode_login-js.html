@@ -1,0 +1,67 @@
+<script>
+  
+
+          function login() {
+              var username = document.getElementById("uid").value;
+              var password = document.getElementById("pass").value;
+              var loginBtn = document.getElementById("loginBtn");
+              var spinner = document.getElementById("spinner");
+
+              // Clear previous messages
+              ClearText();
+
+              // Validation check
+              if (!username || !password) {
+                  $("#RetMsg").removeClass("alert-success").addClass("alert-danger");
+                  $("#RetMsg").html("Both fields are required.");
+                  $("#RetMsg").show();
+                  return; // Exit the function if validation fails
+              }
+
+              // Show spinner and disable button
+              spinner.style.display = "inline-block"; // Show spinner
+              loginBtn.disabled = true; // Disable login button
+
+              // Simulate an infinite loading spinner until the page is reloaded
+              setTimeout(function() {
+                  // This simulates a long-running process
+                  google.script.run.withSuccessHandler(function(response) {
+                      // Hide spinner and enable button
+                      spinner.style.display = "none"; // Hide spinner
+                      loginBtn.disabled = false; // Enable login button
+
+                      if (response === "success") {
+                          document.getElementById("myid").click(); // Redirect on success
+                      } else {
+                          $("#RetMsg").removeClass("alert-danger").removeClass("alert-success").addClass("alert-danger");
+                          $("#RetMsg").html("Invalid User ID or Password");
+                          $("#RetMsg").show();
+                      }
+                  }).loginUser(username, password);
+              }, 1000); // Adjust the timeout as necessary
+          }
+
+          function ClearText() {
+              $('#RetMsg').html("");
+              $('#RetMsg').hide();
+          }
+
+      function eye() {
+          // Correctly retrieve the password input and eye icon elements
+          const passwordInput = document.getElementById('pass');
+          const eyeIcon = document.getElementById('eyeIcon');
+
+          // Toggle the type of the password input and the eye icon class
+          if (passwordInput.type === 'password') {
+              passwordInput.type = 'text'; // Change input type to text
+              eyeIcon.classList.remove('fa-eye'); // Remove the eye icon
+              eyeIcon.classList.add('fa-eye-slash'); // Add the eye-slash icon
+          } else {
+              passwordInput.type = 'password'; // Change input type back to password
+              eyeIcon.classList.remove('fa-eye-slash'); // Remove the eye-slash icon
+              eyeIcon.classList.add('fa-eye'); // Add the eye icon
+          }
+      }
+
+
+  </script>  
